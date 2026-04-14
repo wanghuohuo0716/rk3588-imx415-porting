@@ -1,0 +1,686 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+/dts-v1/;
+
+#include "B1-3588-jd4-main.dtsi"
+#include "B1-3588-jd4-main-EDPtoVGA_LT8711V.dtsi"
+
+/ {
+	model = "Firefly CS-B1-N10-RK3588-MAIN Board";
+	compatible = "rockchip,aio-3588jd4", "rockchip,rk3588";
+
+	/delete-node/ es8388_sound;
+
+
+	ds18b20_1 {
+		// Front sersonr
+		compatible = "firefly,ds1820";
+		status = "okay";
+		ds1820-dq = <&gpio4 RK_PB2 GPIO_ACTIVE_LOW>; //GPIO4_B2 TEMP_DET_1
+		ds18b20-id = <1>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&ds18b20_dp_1_pin>;
+	};
+
+	ds18b20_2 {
+		compatible = "firefly,ds1820";
+		ds1820-dq = <&gpio4 RK_PB3 GPIO_ACTIVE_LOW>; //GPIO4_B3 TEMP_DET_2
+		ds18b20-id = <2>;
+		status = "okay";
+		pinctrl-names = "default";
+		pinctrl-0 = <&ds18b20_dp_2_pin>;
+	};
+
+
+	leds {
+		compatible = "gpio-leds";
+		status = "okay";
+		/delete-node/ user;
+
+		// PW_OK {
+		// 	label = "PW_OK";
+		// 	gpios = <&gpio0 RK_PC7 GPIO_ACTIVE_HIGH>;	//GPIO0_C7
+		// 	default-state = "on";
+		// 	retain-state-shutdown;
+		// };
+
+		MCU_RESET {
+			label = "MCU_RESET";
+			gpios = <&gpio4 RK_PC6 GPIO_ACTIVE_HIGH>;	//GPIO4_C6
+			default-state = "off";
+			retain-state-shutdown;
+		};
+
+		MCU_BOOT {
+			label = "MCU_LOADER";
+			gpios = <&gpio4 RK_PA3 GPIO_ACTIVE_HIGH>;	//GPIO4_A3
+			default-state = "off";
+			retain-state-shutdown;
+		};
+
+		USB20_HUB_EN {
+			label = "USB20_HUB_EN";
+			gpios = <&gpio1 RK_PC7 GPIO_ACTIVE_HIGH>;	//GPIO1_C7
+			default-state = "on";
+			retain-state-shutdown;
+		};
+
+		USB30_PHY_EN {
+			label = "USB30_PHY_EN";
+			gpios = <&gpio1 RK_PD4 GPIO_ACTIVE_HIGH>;	//GPIO1_D4
+			default-state = "on";
+			retain-state-shutdown;
+		};
+
+		VCC5V0_HOST0_EN {
+			label = "VCC5V0_HOST0_EN";
+			gpios = <&gpio1 RK_PC5 GPIO_ACTIVE_HIGH>;	//GPIO1_C5
+			default-state = "on";
+			retain-state-shutdown;
+		};
+
+		VCC5V0_HOST1_EN {
+			label = "VCC5V0_HOST1_EN";
+			gpios = <&gpio1 RK_PC3 GPIO_ACTIVE_HIGH>;	//GPIO1_C3
+			default-state = "on";
+			retain-state-shutdown;
+		};
+
+		UART_5V_EN {
+			label = "UART_5V_EN";
+			gpios = <&gpio1 RK_PD7 GPIO_ACTIVE_HIGH>;	//GPIO1_D7
+			default-state = "on";
+			retain-state-shutdown;
+		};
+
+		BMC_BS_LED {
+			label = "BMC_BS_LED";
+			gpios = <&gpio1 RK_PA4 GPIO_ACTIVE_LOW>;	//GPIO1_A4
+			default-state = "on";
+			// retain-state-shutdown;
+			pinctrl-names = "default";
+			// pinctrl-0 = <&BMC_WORK_LED_B_GPIO>;
+		};
+
+		BMC_WORK_LED_R {
+			label = "BMC_WORK_LED_R";
+			gpios = <&gpio1 RK_PC2 GPIO_ACTIVE_HIGH>;	//GPIO1_C2
+			default-state = "off";
+			retain-state-shutdown;
+			pinctrl-names = "default";
+			// pinctrl-0 = <&BMC_WORK_LED_B_GPIO>;
+		};
+
+		BMC_WORK_LED_Y {
+			label = "BMC_WORK_LED_Y";
+			linux,default-trigger = "heartbeat";
+			gpios = <&gpio3 RK_PA6 GPIO_ACTIVE_HIGH>;	//GPIO3_A6
+			default-state = "on";
+			retain-state-shutdown;
+		};
+
+		BMC_WORK_LED_G {
+			label = "BMC_WORK_LED_G";
+			gpios = <&gpio1 RK_PA6 GPIO_ACTIVE_HIGH>;	//GPIO1_A5
+			default-state = "off";
+			retain-state-shutdown;
+		};
+
+
+		VGA_PWR_EN {
+			label = "VGA_PWR_EN";
+			gpios = <&gpio0 RK_PD3 GPIO_ACTIVE_HIGH>;	//GPIO0_D3
+			default-state = "on";
+			retain-state-shutdown;
+		};
+
+		UID_LED {
+			label = "UID_LED";
+			gpios = <&gpio1 RK_PD5 GPIO_ACTIVE_HIGH>;	//GPIO1_D5
+			default-state = "off";
+			retain-state-shutdown;
+		};
+
+		SATA_STATUS_LED {
+			label = "SATA_STATUS_LED"; // yellow
+			gpios = <&gpio1 RK_PA1 GPIO_ACTIVE_HIGH>;	//GPIO1_A1
+			default-state = "off";
+			retain-state-shutdown;
+		};
+
+		SATA_ACT_LED {
+			label = "SATA_ACT_LED"; // green
+			gpios = <&gpio1 RK_PA0 GPIO_ACTIVE_HIGH>;   //GPIO1_A0
+			default-state = "off";
+			retain-state-shutdown;
+		};
+
+		POWER_ON {
+			label = "POWER_ON";
+			gpios = <&xl9555_1 PCA_IO0_5 GPIO_ACTIVE_HIGH>;	//PCA9555_1 PCA_IO0_5
+			default-state = "keep";
+			retain-state-shutdown;
+		};
+
+		SWITCH_PWR_EN {
+			label = "SWITCH_PWR_EN";
+			gpios = <&gpio2 RK_PC3 GPIO_ACTIVE_LOW>;	//GPIO2_C3
+			default-state = "keep";
+			retain-state-shutdown;
+		};
+
+		SWITCH_PWR_RESET {
+			label = "SWITCH_PWR_RESET";
+			gpios = <&gpio4 RK_PC3 GPIO_ACTIVE_HIGH>;	//GPIO4_C3
+			default-state = "off";
+			retain-state-shutdown;
+		};
+
+		BUZZER_CTL {
+			label = "BUZZER";
+			gpios = <&gpio1 RK_PA3 GPIO_ACTIVE_HIGH>;	//GPIO1_A3
+			default-state = "off";
+			retain-state-shutdown;
+		};
+
+		USB30_HUB_RST {
+			label = "USB30_HUB_RST";
+			gpios = <&gpio1 RK_PA2 GPIO_ACTIVE_HIGH>;	//GPIO1_A2
+			default-state = "off";
+			retain-state-shutdown;
+		};
+
+		CORE1_SYS_EN {
+			label = "CORE1_SYS_EN";
+			gpios = <&xl9555_1 PCA_IO0_0 GPIO_ACTIVE_HIGH>;
+			default-state = "keep";
+			retain-state-shutdown;
+		};
+
+		CORE2_SYS_EN {
+			label = "CORE2_SYS_EN";
+			gpios = <&xl9555_1 PCA_IO0_1 GPIO_ACTIVE_HIGH>;
+			default-state = "keep";
+			retain-state-shutdown;
+		};
+
+		CORE3_SYS_EN {
+			label = "CORE3_SYS_EN";
+			gpios = <&xl9555_1 PCA_IO0_2 GPIO_ACTIVE_HIGH>;
+			default-state = "keep";
+			retain-state-shutdown;
+		};
+
+		CORE4_SYS_EN {
+			label = "CORE4_SYS_EN";
+			gpios = <&xl9555_1 PCA_IO0_3 GPIO_ACTIVE_HIGH>;
+			default-state = "keep";
+			retain-state-shutdown;
+		};
+
+		CORE5_SYS_EN {
+			label = "CORE5_SYS_EN";
+			gpios = <&xl9555_1 PCA_IO0_4 GPIO_ACTIVE_HIGH>;
+			default-state = "keep";
+			retain-state-shutdown;
+		};
+
+		CORE6_SYS_EN {
+			label = "CORE6_SYS_EN";
+			gpios = <&xl9555_2 PCA_IO0_0 GPIO_ACTIVE_HIGH>;
+			default-state = "keep";
+			retain-state-shutdown;
+		};
+
+		CORE7_SYS_EN {
+			label = "CORE7_SYS_EN";
+			gpios = <&xl9555_2 PCA_IO0_1 GPIO_ACTIVE_HIGH>;
+			default-state = "keep";
+			retain-state-shutdown;
+		};
+
+		CORE8_SYS_EN {
+			label = "CORE8_SYS_EN";
+			gpios = <&xl9555_2 PCA_IO0_2 GPIO_ACTIVE_HIGH>;
+			default-state = "keep";
+			retain-state-shutdown;
+		};
+
+		CORE9_SYS_EN {
+			label = "CORE9_SYS_EN";
+			gpios = <&xl9555_2 PCA_IO0_3 GPIO_ACTIVE_HIGH>;
+			default-state = "keep";
+			retain-state-shutdown;
+		};
+
+		CORE10_SYS_EN {
+			label = "CORE10_SYS_EN";
+			gpios = <&xl9555_2 PCA_IO0_4 GPIO_ACTIVE_HIGH>;
+			default-state = "keep";
+			retain-state-shutdown;
+		};
+
+		CORE1_RESET {
+			label = "CORE1_RESET";
+			gpios = <&xl9555_1 PCA_IO1_1 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+			retain-state-shutdown;
+		};
+
+		CORE2_RESET {
+			label = "CORE2_RESET";
+			gpios = <&xl9555_1 PCA_IO1_2 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+			retain-state-shutdown;
+		};
+
+		CORE3_RESET {
+			label = "CORE3_RESET";
+			gpios = <&xl9555_1 PCA_IO1_3 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+			retain-state-shutdown;
+		};
+
+		CORE4_RESET {
+			label = "CORE4_RESET";
+			gpios = <&xl9555_1 PCA_IO1_4 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+			retain-state-shutdown;
+		};
+
+		CORE5_RESET {
+			label = "CORE5_RESET";
+			gpios = <&xl9555_1 PCA_IO1_5 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+			retain-state-shutdown;
+		};
+
+		CORE6_RESET {
+			label = "CORE6_RESET";
+			gpios = <&xl9555_2 PCA_IO0_6 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+			retain-state-shutdown;
+		};
+
+		CORE7_RESET {
+			label = "CORE7_RESET";
+			gpios = <&xl9555_2 PCA_IO0_7 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+			retain-state-shutdown;
+		};
+
+		CORE8_RESET {
+			label = "CORE8_RESET";
+			gpios = <&xl9555_2 PCA_IO1_0 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+			retain-state-shutdown;
+		};
+
+		CORE9_RESET {
+			label = "CORE9_RESET";
+			gpios = <&xl9555_2 PCA_IO1_1 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+			retain-state-shutdown;
+		};
+
+		CORE10_RESET {
+			label = "CORE10_RESET";
+			gpios = <&xl9555_2 PCA_IO1_2 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+			retain-state-shutdown;
+		};
+
+		CORE1_MASKROM {
+			label = "CORE1_MASKROM";
+			gpios = <&xl9555_1 PCA_IO0_6 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+			retain-state-shutdown;
+		};
+
+		CORE2_MASKROM {
+			label = "CORE2_MASKROM";
+			gpios = <&xl9555_1 PCA_IO0_7 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+			retain-state-shutdown;
+		};
+
+		CORE3_MASKROM {
+			label = "CORE3_MASKROM";
+			gpios = <&xl9555_1 PCA_IO1_0 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+			retain-state-shutdown;
+		};
+
+		CORE4_MASKROM {
+			label = "CORE4_MASKROM";
+			gpios = <&xl9555_1 PCA_IO1_6 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+			retain-state-shutdown;
+		};
+
+		CORE5_MASKROM {
+			label = "CORE5_MASKROM";
+			gpios = <&xl9555_1 PCA_IO1_7 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+			retain-state-shutdown;
+		};
+
+		CORE6_MASKROM {
+			label = "CORE6_MASKROM";
+			gpios = <&xl9555_2 PCA_IO1_3 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+			retain-state-shutdown;
+		};
+
+		CORE7_MASKROM {
+			label = "CORE7_MASKROM";
+			gpios = <&xl9555_2 PCA_IO1_4 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+			retain-state-shutdown;
+		};
+
+		CORE8_MASKROM {
+			label = "CORE8_MASKROM";
+			gpios = <&xl9555_2 PCA_IO1_5 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+			retain-state-shutdown;
+		};
+
+		CORE9_MASKROM {
+			label = "CORE9_MASKROM";
+			gpios = <&xl9555_2 PCA_IO1_6 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+			retain-state-shutdown;
+		};
+
+		CORE10_MASKROM {
+			label = "CORE10_MASKROM";
+			gpios = <&xl9555_2 PCA_IO1_7 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+			retain-state-shutdown;
+		};
+	};
+
+	// gpio-keys {
+	// 	compatible = "gpio-keys";
+	// 	#address-cells = <1>;
+	// 	#size-cells = <0>;
+	// 	autorepeat;
+	// 	status = "okay";
+
+	// 	pinctrl-names = "default";
+	// 	pinctrl-0 = <&SWITCH_SYS_DET_BUTTON>;
+
+	// 	button@SWITCH_SYS_DET {
+	// 		gpios = <&gpio1 RK_PA5 GPIO_ACTIVE_LOW>;            //power_key       GPIO1_A7
+	// 		linux,code = <KEY_POWER>;
+	// 		label = "SWITCH_SYS_DET KEY";
+	// 		linux,input-type = <1>;
+	// 		gpio-key,wakeup = <1>;
+	// 		debounce-interval = <100>;
+	// 	};
+	// };
+
+	gpio-keys {
+		compatible = "gpio-keys";
+		autorepeat;
+
+		// button@SWITCH_SYS_DET {
+		// 	gpios = <&gpio1 RK_PA7 GPIO_ACTIVE_LOW>;            //power_key       GPIO1_A7
+		// 	linux,code = <KEY_1>;
+		// 	label = "SWITCH_SYS_DET KEY";
+		// 	linux,input-type = <0x3f>;
+		// 	// gpio-key,wakeup = <1>;
+		// 	// debounce-interval = <100>;
+		// };
+
+
+		// button@SFP2_ACT_DET {
+		// 	gpios = <&gpio0 RK_PB7 GPIO_ACTIVE_LOW>;            //power_key       GPIO0_B7
+		// 	linux,code = <KEY_1>;
+		// 	label = "SFP2_ACT_DET KEY";
+		// 	linux,input-type = <0x3f>;
+		// 	// gpio-key,wakeup = <1>;
+		// 	// debounce-interval = <100>;
+		// };
+
+		// button@P2_ACT_DET {
+		// 	gpios = <&gpio0 RK_PC0 GPIO_ACTIVE_LOW>;            //power_key       GPIO0_C0
+		// 	linux,code = <KEY_1>;
+		// 	label = "P2_ACT_DET KEY";
+		// 	linux,input-type = <0x3f>;
+		// 	// gpio-key,wakeup = <1>;
+		// 	// debounce-interval = <100>;
+		// };
+
+
+		// button@RESET {
+		// 	gpios = <&gpio0 RK_PC6 GPIO_ACTIVE_LOW>;            //power_key       GPIO0_C6
+		// 	linux,code = <766>;
+		// 	label = "P2_ACT_DET KEY";
+		// 	linux,input-type = <EV_KEY>;
+		// 	// gpio-key,wakeup = <1>;
+		// 	debounce-interval = <100>;
+		// };
+
+		// 错了！！！
+		// button@SFP3_ACT_DET {
+		// 	gpios = <&gpio1 RK_PA7 GPIO_ACTIVE_LOW>;            //power_key       GPIO1_A7
+		// 	linux,code = <KEY_1>;
+		// 	label = "SFP3_ACT_DET KEY";
+		// 	linux,input-type = <0x3f>;
+		// 	// gpio-key,wakeup = <1>;
+		// 	debounce-interval = <100>;
+		// };
+
+		// 错了！！！
+		// button@P3_ACT {
+		// 	gpios = <&gpio1 RK_PA7 GPIO_ACTIVE_LOW>;            //power_key       GPIO1_A7
+		// 	linux,code = <KEY_1>;
+		// 	label = "SFP2_ACT_DET KEY";
+		// 	linux,input-type = <0x3f>;
+		// 	// gpio-key,wakeup = <1>;
+		// 	debounce-interval = <100>;
+		// };
+	};
+
+	switch_sensor: switch-sensor {
+        compatible = "generic-adc-thermal";
+        #thermal-sensor-cells = <0>;
+        io-channels = <&saradc 6>;
+        io-channel-names = "sensor-channel";
+        temperature-lookup-table = <
+		           1000  1250 2000  1237 3000  1225 4000  1211 5000  1198 6000  1185 7000  1171 8000  1158 9000  1145
+		10000 1131 11000 1117 12000 1103 13000 1089 14000 1074 15000 1060 16000 1046 17000 1031 18000 1017 19000 1002
+		20000 987  21000 973  22000 958  23000 943  24000 928  25000 913  26000 899  27000 884  28000 869  29000 854
+		30000 840  31000 825  32000 810  33000 795  34000 781  35000 766  36000 752  37000 728  38000 723  39000 709
+		40000 695  41000 681  42000 667  43000 653  44000 640  45000 626  46000 613  47000 599  48000 586  49000 573
+		50000 560  51000 548  52000 535  53000 523  54000 511  55000 499  56000 487  57000 476  58000 464  59000 453
+		60000 422  61000 431  62000 420  63000 410  64000 399  65000 389  66000 379  67000 369  68000 360  69000 350
+		70000 341  71000 332  72000 324  73000 315  74000 306  75000 298  76000 290  77000 282  78000 274  79000 266
+		80000 259  81000 252  82000 245  83000 238  84000 231  85000 225  86000 218  87000 212  88000 206  89000 200
+		90000 194  91000 189  92000 183  93000 178  94000 172  95000 167  96000 163  97000 158  98000 153  99000 149
+		100000 144>;
+	};
+
+	dummy_cool_dev: dummy-cool-dev {
+        compatible = "dummy-cooling-dev";
+        #cooling-cells = <2>; /* min followed by max */
+	};
+
+	//uid key to recovery
+	firefly_cluster_uid_key:cluster_uid_key {
+		label = "cluster_uid_key";
+		compatible = "cluster-uid-key";
+		cluster_uid_gpio = <&gpio4 RK_PD2 GPIO_ACTIVE_HIGH>;
+		status = "okay";
+	};
+};
+
+&thermal_zones {
+	switch_thermal: switch-thermal {
+		polling-delay = <1000>; /* milliseconds */
+		polling-delay-passive = <1000>; /* milliseconds */
+		thermal-sensors = <&switch_sensor>;
+
+		trips {
+			therm_est_trip: therm_est_trip {
+				temperature = <85000>;
+				type = "passive";
+				hysteresis = <1000>;
+			};
+		};
+
+		cooling-maps {
+			map0 {
+				trip = <&therm_est_trip>;
+				cooling-device = <&dummy_cool_dev THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+				contribution = <100>;
+			};
+
+		};
+	};
+};
+
+
+&rgb {
+	status = "disabled";
+};
+
+
+
+&i2s1_8ch {
+	status = "disabled";
+};
+
+
+
+
+&spi0 {
+	status = "okay";
+	max-freq = <48000000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&spi0m3_cs0 &spi0m3_cs1 &spi0m3_pins>;
+
+	spi_wk2xxx_1: spi_wk2xxx_1@0{
+		status = "okay";
+		compatible = "wkmic,wk2xxx_spi";
+		reg = <0x00>;
+		index_base = <1>; // 偏移1，即从ttysWK1开始递增，而非ttysWK0
+		num-ports = <4>;  // 4个串口模式
+		spi-max-frequency = <10000000>;
+		irq-gpio = <&gpio4 RK_PB1 IRQ_TYPE_EDGE_FALLING>;       // WK2124_INT   GPIO4_B1
+		cs-gpio = <&gpio3 RK_PD4 GPIO_ACTIVE_LOW>;
+		firefly,spi0;
+	};
+
+	spi_wk2xxx_2: spi_wk2xxx_2@1{
+		status = "okay";
+		compatible = "wkmic,wk2xxx_spi";
+		reg = <0x01>;
+		index_base = <5>; // 偏移1，即从ttysWK1开始递增，而非ttysWK0
+		num-ports = <4>;  // 4个串口模式
+		spi-max-frequency = <10000000>;
+		irq-gpio = <&gpio4 RK_PB4 IRQ_TYPE_EDGE_FALLING>;       // WK2124_INT   GPIO4_B4
+		cs-gpio = <&gpio3 RK_PD5 GPIO_ACTIVE_LOW>;
+		firefly,spi0;
+	};
+};
+
+//debug 115200 232
+&fiq_debugger{
+    rockchip,baudrate = <115200>;  /* Only 115200 and 1500000 */
+};
+
+
+
+/* pinctrl */
+&pinctrl {
+	ds18b20-dp-1 {
+		ds18b20_dp_1_pin: ds18b20-dp-1-pin {
+			rockchip,pins = <4 RK_PB2 RK_FUNC_GPIO &pcfg_pull_none>;  //GPIO4_B2
+		};
+	};
+
+	ds18b20-dp-2 {
+		ds18b20_dp_2_pin: ds18b20-dp-2-pin {
+			rockchip,pins = <4 RK_PB3 RK_FUNC_GPIO &pcfg_pull_none>;  //GPIO4_B3
+		};
+	};
+
+    leds {
+		BMC_WORK_LED_B_GPIO: BMC-WORK-LED-B-GPIO {
+			/* led_power */
+			rockchip,pins = <1 RK_PC2 RK_FUNC_GPIO &pcfg_pull_up>;
+		};
+ 	};
+
+	wk2xxx-irq-gpios {
+		wk2xxx_1_irq_gpios: wk2xxx-1-irq-gpios{
+			rockchip,pins = <3 RK_PD4 RK_FUNC_GPIO &pcfg_pull_none>; // GPIO3_D4
+		};
+
+		// wk2xxx_2_irq_gpios: wk2xxx-2-irq-gpios{
+		// 	rockchip,pins = <3 RK_PD5 RK_FUNC_GPIO &pcfg_pull_none>; // GPIO3_D5
+		// };
+	};
+};
+
+
+// CORE10_DEBUG
+&uart5 {
+	status = "okay";
+	pinctrl-0 = <&uart5m0_xfer>;
+};
+
+&sdmmc {
+	status = "disabled";
+};
+
+&uart6 {
+	status = "disabled";
+};
+
+&pwm5 {
+//  pinctrl-0 = <&pwm5m1_pins>;
+	status = "disabled";
+};
+
+
+
+&i2s0_8ch{
+	status = "disabled";
+};
+
+&uart0 {
+	status = "okay";
+	pinctrl-0 = <&uart0m0_xfer>;
+};
+
+// power
+&i2c4 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c4m1_xfer>;
+};
+
+// spi flash
+&spi1 {
+	status = "okay";
+	// max-freq = <48000000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&spi1m2_cs0 &spi1m2_pins>;
+
+	spi_dev@0 {
+		compatible = "jedec,spi-nor";
+		reg = <0>;
+		spi-max-frequency = <45000000>;
+		spi-msb-first;
+		// spi-cpol;
+		// spi-cpha;
+	};
+};

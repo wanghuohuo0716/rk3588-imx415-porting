@@ -1,0 +1,12 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
+ *
+ */
+/dts-v1/;
+#include "aio-3588l-mipi101-BSD1218-A101KL68.dtsi"
+
+/ {
+    model = "Firefly AIO-3588L MIPI101(Linux)";
+    compatible = "rockchip,aio-3588l-mipi101-BSD1218-A101KL68", "rockchip,rk3588";
+};

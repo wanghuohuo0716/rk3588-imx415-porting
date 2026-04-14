@@ -1,0 +1,15 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+&sata0 {
+    status = "disabled";
+};
+
+&pcie2x1l2 {
+	reset-gpios = <&pca9555 PCA_IO1_6 GPIO_ACTIVE_HIGH>;
+	vpcie3v3-supply = <&vcc_sata_pwr_en>;
+    status = "okay";
+};

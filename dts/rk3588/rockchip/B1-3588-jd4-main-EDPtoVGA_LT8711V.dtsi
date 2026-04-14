@@ -1,0 +1,138 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+ / {
+
+    // VCC5V0_HOST1_EN: VCC5V0_HOST1_EN {
+    //     compatible = "regulator-fixed";
+    //     enable-active-high;
+    //     gpio =  <&gpio1 RK_PC3 GPIO_ACTIVE_HIGH>;
+
+    //     regulator-name = "VCC5V0_HOST1_EN";
+    //     regulator-boot-on;
+
+    //     regulator-always-on;
+    //     regulator-state-mem {
+    //         regulator-off-in-suspend;
+    //     };
+    // };
+
+    VCC5V0_VGA: VCC5V0_VGA {
+		compatible = "regulator-fixed";
+		regulator-name = "VCC5V0_VGA";
+		regulator-always-on;
+		regulator-boot-on;
+		regulator-min-microvolt = <5000000>;
+		regulator-max-microvolt = <5000000>;
+	};
+
+    // HDMI_TX1_CEC_M0: HDMI_TX1_CEC_M0 {
+    //     compatible = "regulator-fixed";
+    //     enable-active-high;
+    //     gpio =  <&gpio2 RK_PC4 GPIO_ACTIVE_HIGH>;
+
+    //     regulator-name = "HDMI_TX1_CEC_M0";
+    //     regulator-boot-on;
+
+    //     regulator-always-on;
+    //     regulator-state-mem {
+    //         regulator-off-in-suspend;
+    //     };
+    // };
+
+    leds {
+        // LT8711V_QFN48 RST_N
+        HDMI_TX1_CEC_M0: HDMI_TX1_CEC_M0{
+			label = "HDMI_TX1_CEC_M0";
+			gpios = <&gpio4 RK_PC1 GPIO_ACTIVE_HIGH>;
+			default-state = "on";
+			retain-state-shutdown;
+		};
+    };
+
+    edp_panel: edp-panel {
+        compatible = "simple-panel";
+        status = "okay";
+        power-supply = <&VCC5V0_VGA>;
+
+    
+        // panel-timing {
+        //     clock-frequency = <140000000>;
+        //     hactive = <1920>;
+        //     vactive = <1080>;
+        //     hfront-porch = <12>;
+        //     hsync-len = <16>;
+        //     hback-porch = <48>;
+        //     vfront-porch = <8>;
+        //     vsync-len = <4>;
+        //     vback-porch = <8>;
+        //     hsync-active = <0>;
+        //     vsync-active = <0>;
+        //     de-active = <0>;
+        //     pixelclk-active = <0>;
+        // };
+
+        port {
+            panel_in_edp0: endpoint {
+                remote-endpoint = <&edp0_out_panel>;
+            };
+        };
+    };
+ };
+
+&hdmi0 {
+	status = "disabled";
+};
+
+&hdmi0_in_vp2 {
+    status = "disabled";
+};
+
+&hdptxphy_hdmi0 {
+	status = "disabled";
+};
+
+&route_hdmi0 {
+	status = "disabled";
+};
+
+&edp0{
+    force-hpd;
+    hpd-gpios = <&gpio1 RK_PA5 GPIO_ACTIVE_HIGH>;
+    pinctrl-names = "default";
+    pinctrl-0 = <&edp_hpd>;
+    status = "okay";
+    ports {
+        port@1 {
+            reg = <1>;
+            edp0_out_panel: endpoint {
+                remote-endpoint = <&panel_in_edp0>;
+            };
+        };
+    };
+};
+
+&edp0_in_vp2{
+    status = "okay";
+};
+
+&hdptxphy0 {
+    status = "okay";
+};
+
+&route_edp0 {
+    status = "okay";
+    connect = <&vp2_out_edp0>;
+};
+
+&pinctrl {
+        edp{
+            edp_hpd: edp-hpd{
+            // rockchip,pins = <1 RK_PA5 RK_FUNC_GPIO &pcfg_pull_down_drv_level_6>;
+            rockchip,pins = <1 RK_PA5 RK_FUNC_GPIO &pcfg_pull_down>;
+        };
+    };
+};

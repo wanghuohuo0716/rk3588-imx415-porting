@@ -1,0 +1,15 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+/dts-v1/;
+
+#include "rk3588-firefly-cs-b1-jd4.dtsi"
+#include "rk3588-firefly-cs-b1-jd4-mipi101-M101014-BE45-A1.dtsi"
+
+/ {
+	model = "Firefly RK3588-Cluster-Server-B1-SUB Linux";
+	compatible = "rockchip,rk3588-firefly-cs-b1-jd4", "rockchip,rk3588";
+};

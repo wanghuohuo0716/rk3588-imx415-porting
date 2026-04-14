@@ -1,0 +1,59 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+/dts-v1/;
+
+#define CAM0_OR_CAM1 1 /*1 = CAM0 , 0 = CAM1 */
+#define IMX415_0_OR_SPI0 1 /* 1 = IMX415_0 , 0 = SPI0 */
+#define IMX415_1_OR_SPI1 1 /* 1 = IMX415_1 , 0 = SPI1 */
+
+#include "aio-3588jd4.dtsi"
+
+#if CAM0_OR_CAM1
+#include "aio-3588jd4-cam0-8ms1m.dtsi"
+#if IMX415_1_OR_SPI1
+#include "aio-3588jd4-cam0-imx415.dtsi"
+#endif
+#else
+#include "aio-3588jd4-cam1-8ms1m.dtsi"
+#if IMX415_0_OR_SPI0
+#include "aio-3588jd4-cam1-imx415.dtsi"
+#endif
+#endif
+
+/ {
+	model = "Firefly AIO-3588JD4";
+	compatible = "rockchip,aio-3588jd4", "rockchip,rk3588";
+
+	cam0_cam1_switch: cam0-cam1-switch {
+		compatible = "regulator-fixed";
+		regulator-name = "cam0_cam1_switch";
+		regulator-min-microvolt = <1800000>;
+		regulator-max-microvolt = <1800000>;
+		regulator-boot-on;
+		regulator-always-on;
+		status = "okay";
+
+#if CAM0_OR_CAM1
+		enable-active-high;
+		gpio = <&gpio3 RK_PC1 GPIO_ACTIVE_HIGH>;
+#else
+		enable-active-low;
+		gpio = <&gpio3 RK_PC1 GPIO_ACTIVE_LOW>;
+#endif
+
+		pinctrl-names = "default";
+		pinctrl-0 = <&cam0_or_cam1_switch_pin>;
+	};
+};
+
+&pinctrl {
+	cam {
+		cam0_or_cam1_switch_pin:cam0-or-cam1-switch-pin{
+			rockchip,pins = <3 RK_PC1 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+	};
+};

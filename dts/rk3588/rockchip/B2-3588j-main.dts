@@ -1,0 +1,35 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+/dts-v1/;
+
+#define FF_XL9555
+#define FF_SUB_DEBUG
+#define FF_MAIN_MGNT
+#define FF_MAIN_NIC0
+#define FF_DISPLAY_BACK
+#define FF_DISPLAY_FRONT
+#define FF_BMC_USB_EXPOSE
+#define FF_BMC_USB_HUB30
+#define FF_BMC_USB_CON3_C2
+#define FF_BMC_USB_CON3_C1
+#define FF_BP_USB20_PWR
+#define FF_BMC_TEMP_SENSOR
+#define FF_BMC_BUZZER
+#define FF_FAN
+#define FF_WATCHDOG
+#define FF_RTC
+#define FF_BMC_LED
+#define FF_EEPROM
+#define FF_SUB_HPD
+
+
+#include "B2-3588j-main.dtsi"
+
+/ {
+    model = "Firefly CS-B2-N72-RK3588-MAIN Board";
+    compatible = "rockchip,rk3588-firefly-itx-3588j", "rockchip,rk3588";
+};

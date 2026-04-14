@@ -1,0 +1,33 @@
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+*.code-workspace
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+~$*
+
+# Download/cache artifacts
+*.crdownload
+*.part
+*.download
+*.下载
+
+# Build and archive outputs
+out/
+build/
+dist/
+release/
+*.log
+*.bin
+*.img
+*.iso
